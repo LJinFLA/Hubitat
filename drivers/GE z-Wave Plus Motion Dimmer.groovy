@@ -14,21 +14,20 @@
 */
 
 metadata {
-	definition (name: "GE Z-Wave Plus Motion Dimmer", namespace: "Botched1", author: "Jason Bottjen") {
-		capability "Actuator"
-		capability "Motion Sensor"
-		capability "PushableButton"
-		capability "Configuration"
-		capability "Refresh"
-		capability "Sensor"
-		capability "Switch"
-		capability "Switch Level"
-		capability "Light"
+    definition (name: "GE Z-Wave Plus Motion Dimmer", namespace: "Botched1", author: "Jason Bottjen") {
+    capability "Actuator"
+    capability "Motion Sensor"
+    capability "PushableButton"
+    capability "Configuration"
+    capability "Refresh"
+    capability "Sensor"
+    capability "Switch"
+    capability "Switch Level"
+    capability "Light"
     capability "Polling"
-
 		
-		command "setDefaultDimmerLevel", [[name:"Default Dimmer Level",type:"NUMBER", description:"Default Dimmer Level Used when Turning ON. (0=Last Dimmer Value)", range: "0..99"]]
-		command "toggleMode"
+    command "setDefaultDimmerLevel", [[name:"Default Dimmer Level",type:"NUMBER", description:"Default Dimmer Level Used when Turning ON. (0=Last Dimmer Value)", range: "0..99"]]
+    command "toggleMode"
     command "occupancy"
     command "occupied"
     command "vacancy"
@@ -110,10 +109,11 @@ def parse(String description) {
     def result = null
 	if (description != "updated") {
 		if (logEnable) log.debug "parse() >> zwave.parse($description)"
-		def cmd = zwave.parse(description) //, [0x20: 1, 0x25: 1, 0x56: 1, 0x70: 2, 0x72: 2, 0x85: 2])
+		def cmd = zwave.parse(description)//, [0x20: 1, 0x25: 1, 0x56: 1, 0x70: 2, 0x72: 2, 0x85: 2])
 
 		if (logEnable) log.debug "cmd: $cmd"
-		
+		if (txtEnable) log.info("${device.displayName} ${result}")
+
 		if (cmd) {
 			result = zwaveEvent(cmd)
         }
@@ -126,6 +126,7 @@ def parse(String description) {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Z-Wave Messages
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 def zwaveEvent(hubitat.zwave.commands.crc16encapv1.Crc16Encap cmd) {
 	if (logEnable) log.debug "zwaveEvent(): CRC-16 Encapsulation Command received: ${cmd}"
 
