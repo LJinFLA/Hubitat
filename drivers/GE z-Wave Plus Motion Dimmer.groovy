@@ -52,31 +52,55 @@ metadata {
     attribute "defaultLevel", "number"
         
     fingerprint mfr:"0063", prod:"494D", model: "3034", deviceJoinName: "GE Z-Wave Plus Motion Wall Dimmer"
-
-
 	}
 
  preferences {
 	 input (type: "paragraph", element: "paragraph", title: "Dimmer General Settings", description: "")
+	 //param 1
 	 input "paramLightTimer", "enum", title: "Light Timeout", description: "Length of time after no motion for the light to shut off in Occupancy/Vacancy modes", options: ["0" : "5 seconds", "1" : "1 minute", "5" : "5 minutes (default)", "15" : "15 minutes", "30" : "30 minutes", "255" : "disabled"], required: false, displayDuringSetup: true
+         input ("timeoutdurationPress","enum", title: "Double Press Timeout Duration (Occupancy/Vacancy)", description: "Physically press 'on' twice within 10 seconds to override timeout. Resets when light goes off", options: ["0" : "5 seconds", "1" : "1 minute", "5" : "5 minutes", "15" : "15 minutes", "30" : "30 minutes"], required: false
+	 input (name: "modeOverride", title: "Double Press Operating Mode Override", description: "Physically press 'off' twice within 10 seconds to override the current operating mode", type: "enum", options: ["1" : "Manual (no auto-on/no auto-off)", "2" : "Vacancy (no auto-on/auto-off)", "3" : "Occupancy (auto-on/auto-off)"], required: false
+	 //param 3
 	 input "paramOperationMode", "enum", title: "Operating Mode", description: "Occupancy: Automatically turn on and off the light with motion\nVacancy: Manually turn on, automatically turn off light with no motion.", options: ["1" : "Manual", "2" : "Vacancy", "3" : "Occupancy (default)"], required: false, displayDuringSetup: true
+	 //param 5
 	 input "paramInverted", "enum", title: "Switch Buttons Direction", multiple: false, options: ["0" : "Normal (default)", "1" : "Inverted"], required: false, displayDuringSetup: true
+	 //param 6
 	 input "paramMotionEnabled", "enum", title: "Motion Sensor", description: "Enable/Disable Motion Sensor.", options: ["0" : "Disable","1" : "Enable (default)"], required: false
+	 //param 13
 	 input "paramMotionSensitivity", "enum", title: "Motion Sensitivity", description: "Motion Sensitivity", options: ["1" : "High", "2" : "Medium (default)", "3" : "Low"], required: false, displayDuringSetup: true
+	 //param 14
 	 input "paramLightSense", "enum", title: "Light Sensing", description: "If enabled, Occupancy mode will only turn light on if it is dark", options: ["0" : "Disabled","1" : "Enabled (default)"], required: false, displayDuringSetup: true
+	 //param 15
 	 input "paramMotionResetTimer", "enum", title: "Motion Detection Reset Time", options: ["0" : "Disabled", "1" : "10 sec", "2" : "20 sec (default)", "3" : "30 sec", "4" : "45 sec", "110" : "27 mins"], required: false
-	 //
+	 //Paragraph
 	 input (type: "paragraph", element: "paragraph", title: "Dimmer Timing Settings. Total dimming time = steps*duration", description: "")
+	 //param 9
 	 input "paramZSteps", "number", title: "Z-Wave Dimming Steps", multiple: false, defaultValue: "1", range: "1..99", required: false, displayDuringSetup: true
-     input "paramZDuration", "number", title: "Z-Wave Dimming Duration (in 10ms increments)", multiple: false, defaultValue: "3", range: "1..255", required: false, displayDuringSetup: true
+     	 //param 10
+	 input "paramZDuration", "number", title: "Z-Wave Dimming Duration (in 10ms increments)", multiple: false, defaultValue: "3", range: "1..255", required: false, displayDuringSetup: true
+	 //param 7
 	 input "paramPSteps", "number", title: "Physical Dimming Steps", multiple: false, defaultValue: "1", range: "1..99", required: false, displayDuringSetup: true
+	 //param 8
 	 input "paramPDuration", "number", title: "Physical Dimming Duration (in 10ms increments)", multiple: false, defaultValue: "3", range: "1..255", required: false, displayDuringSetup: true
+	 //param 16
 	 input "paramSwitchMode", "enum", title: "Switch Mode Enable (physical switch buttons only do ON/OFF - no dimming)", multiple: false, options: ["0" : "Disable (default)", "1" : "Enable"], required: false, displayDuringSetup: true
+	 //param 17
 	 input "paramDefaultDimmerLevel", "number", title: "Default Dimmer Level (0=Last Dimmer Level)", multiple: false, defaultValue: "0", range: "0..99", required: false, displayDuringSetup: true	 
+	 //param 18
 	 input "paramDimUpRate", "enum", title: "Speed to Dim up the light to the default level", multiple: false, options: ["0" : "Quickly (Default)", "1" : "Slowly"], required: false, displayDuringSetup: true
-	 //	 
-	 input ( type: "paragraph", element: "paragraph", title: "Logging", description: "")
-	 input name: "logEnable", type: "bool", title: "Enable debug logging", defaultValue: true
+	 //Paragraph
+	 //association groups
+         input ( type: "paragraph", element: "paragraph", title: "", description: "**Configure Association Groups**\nDevices in association group 2 will receive Basic Set commands directly from the switch when it is turned on or off. Use this to control another device as if it was connected to this switch.\n\n" + "Devices in association group 3 Same as Group 2 for this device\n\n" + "Devices are entered as a comma delimited list of the Device Network IDs in hexadecimal format.")			           
+         input ( name: "requestedGroup2", title: "Association Group 2 Members (Max of 5):", description: "Use the 'Device Network ID' for each device", type: "text", required: false )
+         input ( name: "requestedGroup3", title: "Association Group 3 Members (Max of 4):", description: "Use the 'Device Network ID' for each device", type: "text", required: false )            
+          //description
+          input title: "", description: "**setLevel Default Function (Advanced)**\nDefines how 'setLevel' behavior affects the light.",  type: "paragraph", element: "paragraph"
+          input "setlevelmode", "bool", title: "setLevel Does Not Activate Light", defaultValue:false
+	  input ( type: "paragraph", element: "paragraph", title: "Logging", description: "")
+	 
+	  input name: "logEnable", type: "bool", title: "Enable debug logging", defaultValue: true
+	  input name: "txtEnable", type: "bool", title: "Enable descriptionText logging", defaultValue: true
+
    }
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
